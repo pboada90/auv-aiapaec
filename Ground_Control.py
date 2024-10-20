@@ -1,5 +1,12 @@
 from customtkinter import *
-#from PIL import Image
+import joystick_control
+
+try:
+    joystick = joystick_control.init_joystick()
+    print("Joystick initialized!")
+except Exception as e:
+    print(e)
+    exit()
 
 set_appearance_mode("dark")
 
@@ -99,11 +106,33 @@ class App(CTk):
         self.depth_frame = DepthFrame(self, "Depth")
         self.depth_frame.grid(row=1, column=1, padx=10, pady=10, sticky="nsew")
 
-        #self.button = CTkButton(self, text="my button", command=self.button_callback)
-        #self.button.grid(row=3, column=0, padx=10, pady=10, sticky="ew")
+        self.check_joystick_events()
 
-    def button_callback(self):
-        print("button pressed")
+    def check_joystick_events(self):
+        events = joystick_control.get_joystick_events()
+        for event in events:
+            if event == "QUIT":
+                self.exit()
+
+            elif isinstance(event, tuple) and event[0] == "BUTTONDOWN":
+                if event[1] == 11:
+                    print("Emerging...")
+                elif event[1] == 12:
+                    print("Inmersing...")
+
+            elif isinstance(event, tuple) and event[0] == "axis_2":
+                print(f"{event[0]} value = {event[1]}")
+
+            elif isinstance(event, tuple) and event[0] == "axis_3":
+                print(f"{event[0]} value = {event[1]}")
+            
+            elif isinstance(event, tuple) and event[0] == "BUTTONUP":
+                if event[1] == 11:
+                    print("Emerging stopped...")
+                elif event[1] == 12:
+                    print("Inmersing stopped...")
+
+        self.after(100, self.check_joystick_events)
 
 app = App()
 
