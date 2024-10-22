@@ -2,14 +2,14 @@ import numpy as np
 import ezdxf
 
 a = 300
-b = 800
-c = 300
+b = 900
+c = 200
 d = 180
 
 l = a+b+c
 n = 2.5
 
-theta = 30
+theta = 50
 theta = theta * np.pi / 180
 
 x = np.linspace(0, l, 100)
@@ -29,4 +29,4 @@ doc=ezdxf.new('R2010')
 msp=doc.modelspace()
 msp.add_spline(body)
 # save the DXF document
-doc.saveas("spline30_degrees.dxf")
+doc.saveas("spline50_degrees_c_200.dxf")
